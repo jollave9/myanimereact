@@ -8,7 +8,6 @@ import useScrollTrigger from '@material-ui/core/useScrollTrigger';
 import TextField from '@material-ui/core/TextField';
 import { Toolbar } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
-import axios from 'axios'
 
 const useStyles = makeStyles({
     searchBar: {
@@ -66,7 +65,7 @@ const scrollTop = () => {
     document.documentElement.scrollTop = 0; // For Chrome, Firefox, IE and Opera
 }
 
-export default function MyAppBar_Mobile(props) {
+export default function MyAppBarMobile(props) {
     const classes = useStyles()
     return (
         <>

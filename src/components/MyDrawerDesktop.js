@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import Drawer from '@material-ui/core/Drawer';
 import { makeStyles } from '@material-ui/core/styles';
 import { useMediaQuery } from '@material-ui/core'
@@ -35,7 +35,7 @@ const useStyles = makeStyles({
 
 
 // baliktad ang openDrawer
-export default function MyDrawer_Desktop(props) {
+export default function MyDrawerDesktop(props) {
 
     const classes = useStyles()
     let isMobile = useMediaQuery('(max-width:393px)')

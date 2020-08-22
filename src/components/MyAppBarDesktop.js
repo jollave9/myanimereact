@@ -18,7 +18,7 @@ const useStyles = makeStyles({
 
 });
 
-export default function MyAppBar_Desktop(props) {
+export default function MyAppBarDesktop(props) {
     const classes = useStyles()
     // console.log(props.store)
     return (

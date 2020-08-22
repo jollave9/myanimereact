@@ -1,14 +1,14 @@
-import React, { Component } from 'react';
+import React from 'react';
 import { useState, useEffect } from 'react'
 import { useMediaQuery } from '@material-ui/core'
 import axios from 'axios'
-import MyAppBar_Mobile from '../components/MyAppBar_Mobile'
-import MyDrawer_Mobile from '../components/MyDrawer_Mobile'
-import MyDrawer_Desktop from '../components/MyDrawer_Desktop'
+import MyAppBarMobile from '../components/MyAppBarMobile'
+import MyDrawerMobile from '../components/MyDrawerMobile'
+import MyDrawerDesktop from '../components/MyDrawerDesktop'
 import ScrollToTopButton from '../components/ScrollToTopButton'
-import MyAppBar_Desktop from '../components/MyAppBar_Desktop';
-import SearchSuggestion_Mobile from '../components/SearchSuggestion_Mobile';
-import SearchSuggestion_Desktop from '../components/SearchSuggestion_Desktop';
+import MyAppBarDesktop from '../components/MyAppBarDesktop';
+import SearchSuggestionMobile from '../components/SearchSuggestionMobile';
+import SearchSuggestionDesktop from '../components/SearchSuggestionDesktop';
 import TextField from '@material-ui/core/TextField';
 import { makeStyles } from '@material-ui/core/styles';
 import { connect } from 'react-redux'
@@ -66,7 +66,6 @@ function Search(props) {
             background: 'black'
         },
         p: {
-            color: 'white',
             margin: '0',
             padding: '6px',
             fontFamily: 'Montserrat, sans-serif',
@@ -97,7 +96,6 @@ function Search(props) {
             background: 'black'
         },
         p: {
-            color: 'white',
             margin: '0',
             padding: '6px',
             fontFamily: 'Montserrat, sans-serif',
@@ -125,7 +123,7 @@ function Search(props) {
             .then((res) => res.data)
             .then((data) => setState(data))
 
-    }, [])
+    }, [props.location.search])
 
     const isMobile = useMediaQuery('(max-width:410px)')
     //bug: opening drawer triggers useMediaQuery
@@ -142,15 +140,15 @@ function Search(props) {
         <>
             {isMobile ?
                 <>
-                    <MyAppBar_Mobile store={props} />
-                    <MyDrawer_Mobile store={props} />
-                    <SearchSuggestion_Mobile store={props} />
+                    <MyAppBarMobile store={props} />
+                    <MyDrawerMobile store={props} />
+                    <SearchSuggestionMobile store={props} />
                     <ul style={styles_Mobile.ul}>
                         {state.map((x, i) => {
                             return (
-                                <a style={styles_Mobile.a} key={'a:' + i} href={'/anime/' + x.name} alt={x.name}>
+                                <a style={styles_Mobile.a} key={'a:' + i} href={'/anime/' + x.name} >
                                     <li style={styles_Mobile.li} key={'li:' + i}>
-                                        <img style={styles_Mobile.img} key={'img:' + i} src={x.img} />
+                                        <img style={styles_Mobile.img} key={'img:' + i} src={x.img} alt={x.name} />
                                         <p style={styles_Mobile.p} key={'p:' + i}>{x.name}</p>
                                     </li>
                                 </a>
@@ -160,8 +158,8 @@ function Search(props) {
                 </>
                 :
                 <>
-                    <MyAppBar_Desktop store={props} />
-                    <MyDrawer_Desktop store={props} />
+                    <MyAppBarDesktop store={props} />
+                    <MyDrawerDesktop store={props} />
                     <form style={{ margin: '90px 0 0 250px' }} action='/search'>
                         <TextField
                             name='keyword'
@@ -176,13 +174,13 @@ function Search(props) {
                         />
                         <button type='submit' className={classes.btn}><i className='fa fa-search'></i></button>
                     </form>
-                    <SearchSuggestion_Desktop store={props} />
+                    <SearchSuggestionDesktop store={props} />
                     <ul style={styles_Desktop.ul}>
                         {state.map((x, i) => {
                             return (
-                                <a style={styles_Desktop.a} key={'a:' + i} href={'/anime/' + x.name} alt={x.name}>
+                                <a style={styles_Desktop.a} key={'a:' + i} href={'/anime/' + x.name} >
                                     <li style={styles_Desktop.li} key={'li:' + i}>
-                                        <img style={styles_Desktop.img} key={'img:' + i} src={x.img} />
+                                        <img style={styles_Desktop.img} key={'img:' + i} src={x.img} alt={x.name} />
                                         <p style={styles_Desktop.p} key={'p:' + i}>{x.name}</p>
                                     </li>
                                 </a>

@@ -1,80 +1,116 @@
 import React from 'react';
-import { useState, useEffect } from 'react'
-import axios from 'axios'
+import { useMediaQuery } from '@material-ui/core'
+import MyAppBarMobile from '../components/MyAppBarMobile'
+import MyDrawerMobile from '../components/MyDrawerMobile'
+import MyDrawerDesktop from '../components/MyDrawerDesktop'
+import ScrollToTopButton from '../components/ScrollToTopButton'
+import MyAppBarDesktop from '../components/MyAppBarDesktop';
+import SearchSuggestionMobile from '../components/SearchSuggestionMobile';
+import SearchSuggestionDesktop from '../components/SearchSuggestionDesktop';
+import ContentMobile from '../components/ContentMobile';
+import ContentDesktop from '../components/ContentDesktop';
+import TextField from '@material-ui/core/TextField';
+import { makeStyles } from '@material-ui/core/styles';
+import { connect } from 'react-redux'
+import * as drawerActions from '../redux/actions/drawerActions'
+import searchSuggestion from '../redux/actions/searchSuggestionActions'
 
-function Home() {
-    const [state, setState] = useState({
-        list: [],
-    })
-
-    const [keyword, setKeyword] = useState("")
-    const [styles, setStyle] = useState({
-        search: {
-            width: '40vw',
-            fontSize: '1.7em',
+const useStyles = makeStyles({
+    searchBar: {
+        '& .MuiOutlinedInput-root': {
+            backgroundColor: '#333333',
             color: 'white',
-            backgroundColor: '#2b2b2b',
-            margin: '10px 0 0 10px',
-            border: '1px solid #5e5d5d',
-            borderRadius: '20px',
-            padding: '20px'
+            width: '60vw',
+            '& fieldset': {
+                borderColor: 'white',
+            },
+            '&:hover fieldset': {
+                borderColor: 'white',
+            },
+            '&.Mui-focused fieldset': {
+                borderColor: '#F2C94C',
+            },
         },
-        li: {
-            marginBottom: '3px',
-            backgroundColor: 'black',
-            padding: '5px'
+        '& .MuiInputLabel-root': {
+            color: 'white',
+            marginTop: '-5px',
+            '&.Mui-focused': {
+                color: '#F2C94C'
+            }
         },
-        ul: {
-            listStyle: 'none',
-            fontSize: '1.3em',
-            padding: '0',
-        },
-        div: {
-            backgroundColor: '#2b2b2b',
-            position: 'fixed',
-            width: '100vw',
-            height: '100vh'
+        '& .MuiOutlinedInput-input': {
+            padding: '12px 10px',
         }
+
+    },
+    btn: {
+        height: '43px',
+        width: '43px',
+        cursor: 'pointer'
     }
-    )
-    const handleChange = (e) => {
+})
 
-        const { value } = e.target
-        setKeyword(value)
+function HomeTest(props) {
+    const isMobile = useMediaQuery('(max-width:410px)')
+    //bug: opening drawer triggers useMediaQuery
+    // console.log(isMobile)
+    const classes = useStyles()
 
+    const scrollTop = () => {
+        document.body.scrollTop = 0; // For Safari
+        document.documentElement.scrollTop = 0; // For Chrome, Firefox, IE and Opera
     }
-
-    useEffect(() => {
-        axios.get('http://192.168.1.111:5000/api/search?keyword=' + keyword)
-            .then((res) => res.data)
-            .then((data) => setState({
-                list: data
-            }))
-        // console.log(keyword, state.list)
-
-    }, [keyword])
 
     return (
-        <div style={styles.div}>
-            <form action="search" >
-                <input
-                    type="text"
-                    name="keyword"
-                    placeholder='Search'
-                    value={keyword}
-                    onChange={handleChange}
-                    style={styles.search} />
-                <input type="submit" />
-            </form>
-            <ul style={styles.ul}>
-                {state.list && state.list.map((x, i) =>
-                    <a key={'a:' + i + x.name} href={'/search?keyword=' + x.name} style={{ textDecoration: 'none', color: 'white' }}>
-                        <li key={'li:' + i + x.name} style={styles.li}>{x.name}</li>
-                    </a>)
-                }
-            </ul>
-        </div >
+        <>
+            {isMobile ?
+                <>
+                    <MyAppBarMobile store={props} />
+                    <MyDrawerMobile store={props} />
+                    <SearchSuggestionMobile store={props} />
+                    <ContentMobile store={props} />
+                </>
+                :
+                <>
+                    <MyAppBarDesktop store={props} />
+                    <MyDrawerDesktop store={props} />
+                    <form style={{ margin: '90px 0 0 250px' }} action='/search'>
+                        <TextField
+                            name='keyword'
+                            label="Search"
+                            type="search"
+                            variant="outlined"
+                            className={classes.searchBar}
+                            onClick={scrollTop}
+                            onChange={(event) => {
+                                props.search_suggestion(event.target.value)
+                            }}
+                        />
+                        <button type='submit' className={classes.btn}><i className='fa fa-search'></i></button>
+                    </form>
+                    <SearchSuggestionDesktop store={props} />
+                    <ContentDesktop store={props} />
+                    <h1>test</h1>
+
+                </>
+
+            }
+            <ScrollToTopButton />
+        </>
     );
 }
+const mapStateToProps = (state) => {
+    return ({
+        openDrawer: state.openDrawer,
+        searchSuggestion: state.searchSuggestion
+    })
+}
+const mapDispatchToProps = (dispatch) => {
+    return ({
+        open_drawer: () => dispatch(drawerActions.OPEN_DRAWER),
+        close_drawer: () => dispatch(drawerActions.CLOSE_DRAWER),
+        search_suggestion: (keyword) => dispatch(searchSuggestion(keyword))
+    })
+}
 
-export default Home;
+export default connect(mapStateToProps, mapDispatchToProps)(HomeTest)

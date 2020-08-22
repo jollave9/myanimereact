@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 
 
-export default function SearchSuggestion_Desktop(props) {
+export default function SearchSuggestionDesktop(props) {
 
     const [marginTop, setMarginTop] = useState('0')
     const styles = {
@@ -38,9 +38,9 @@ export default function SearchSuggestion_Desktop(props) {
             <ul style={styles.ul}>
                 {props.store.searchSuggestion.data && props.store.searchSuggestion.data.map((x, i) => {
                     return (
-                        <a style={styles.a} key={'a:' + i} href={'/anime/' + x.name} alt={x.name}>
+                        <a style={styles.a} key={'a:' + i} href={'/anime/' + x.name} >
                             <li style={styles.li} key={'li:' + i}>
-                                <img style={styles.img} key={'img:' + i} src={x.img} />
+                                <img style={styles.img} key={'img:' + i} src={x.img} alt={x.name} />
                                 <p style={styles.p} key={'p:' + i}>{x.name}</p>
                             </li>
                         </a>

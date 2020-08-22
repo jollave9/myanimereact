@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import Drawer from '@material-ui/core/Drawer';
 import IconButton from '@material-ui/core/IconButton';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
@@ -39,7 +39,7 @@ const useStyles = makeStyles({
 })
 
 
-export default function MyDrawer_mobile(props) {
+export default function MyDrawerMobile(props) {
 
     const classes = useStyles()
     let isMobile = useMediaQuery('(max-width:393px)')

@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from 'react'
 import { useMediaQuery } from '@material-ui/core'
 import axios from 'axios'
-import MyAppBar_Mobile from '../components/MyAppBar_Mobile'
-import MyDrawer_Mobile from '../components/MyDrawer_Mobile'
-import MyDrawer_Desktop from '../components/MyDrawer_Desktop'
+import MyAppBarMobile from '../components/MyAppBarMobile'
+import MyDrawerMobile from '../components/MyDrawerMobile'
+import MyDrawerDesktop from '../components/MyDrawerDesktop'
 import ScrollToTopButton from '../components/ScrollToTopButton'
-import MyAppBar_Desktop from '../components/MyAppBar_Desktop';
-import SearchSuggestion_Mobile from '../components/SearchSuggestion_Mobile';
-import SearchSuggestion_Desktop from '../components/SearchSuggestion_Desktop';
+import MyAppBarDesktop from '../components/MyAppBarDesktop';
+import SearchSuggestionMobile from '../components/SearchSuggestionMobile';
+import SearchSuggestionDesktop from '../components/SearchSuggestionDesktop';
 import TextField from '@material-ui/core/TextField';
 import { makeStyles } from '@material-ui/core/styles';
 import { connect } from 'react-redux'
@@ -82,7 +82,7 @@ function Video(props) {
             .then((res) => setState({ isLoading: false, data: res.data }))
             .catch(e => console.log(e))
 
-    }, [])
+    }, [filteredNameEpisode, filteredName])
 
     const isMobile = useMediaQuery('(max-width:410px)')
     //bug: opening drawer triggers useMediaQuery
@@ -176,9 +176,9 @@ function Video(props) {
         <>
             {isMobile ?
                 <>
-                    <MyAppBar_Mobile store={props} />
-                    <MyDrawer_Mobile store={props} />
-                    <SearchSuggestion_Mobile store={props} />
+                    <MyAppBarMobile store={props} />
+                    <MyDrawerMobile store={props} />
+                    <SearchSuggestionMobile store={props} />
                     {vid_src.isLoading && <h1 style={{ color: 'white' }}>LOADING...</h1>}
 
                     {
@@ -211,8 +211,8 @@ function Video(props) {
                 </>
                 :
                 <>
-                    <MyAppBar_Desktop store={props} />
-                    <MyDrawer_Desktop store={props} />
+                    <MyAppBarDesktop store={props} />
+                    <MyDrawerDesktop store={props} />
                     <form style={{ margin: '90px 0 0 250px' }} action='/search'>
                         <TextField
                             name='keyword'
@@ -227,7 +227,7 @@ function Video(props) {
                         />
                         <button type='submit' className={classes.btn}><i className='fa fa-search'></i></button>
                     </form>
-                    <SearchSuggestion_Desktop store={props} />
+                    <SearchSuggestionDesktop store={props} />
                     {
                         vid_src.isLoading && <h1 style={{ color: 'white', marginLeft: props.openDrawer ? '0' : '200px' }}>LOADING VIDEO ...</h1>
                     }
