@@ -15,6 +15,7 @@ import * as drawerActions from '../redux/actions/drawerActions'
 import searchSuggestion from '../redux/actions/searchSuggestionActions'
 import VideoPlayer from 'react-video-js-player';
 
+
 function Video(props) {
 
     const useStyles = makeStyles({
@@ -84,7 +85,7 @@ function Video(props) {
 
     }, [filteredNameEpisode, filteredName])
 
-    const isMobile = useMediaQuery('(max-width:410px)')
+    const isMobile = useMediaQuery('(max-width:900px)')
     //bug: opening drawer triggers useMediaQuery
     // console.log(isMobile)
 
@@ -241,6 +242,7 @@ function Video(props) {
                                     poster={anime.img}
                                     width="900"
                                     height="450"
+                                    crossorigin
                                 />
                             </div>
                         }
@@ -266,6 +268,7 @@ function Video(props) {
                 </>
 
             }
+
             <ScrollToTopButton />
         </>
     )

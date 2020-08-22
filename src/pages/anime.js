@@ -64,7 +64,7 @@ function Anime(props) {
             .catch(e => console.log(e))
     }, [filteredName])
 
-    const isMobile = useMediaQuery('(max-width:410px)')
+    const isMobile = useMediaQuery('(max-width:900px)')
     //bug: opening drawer triggers useMediaQuery
     // console.log(isMobile)
     console.log(props)

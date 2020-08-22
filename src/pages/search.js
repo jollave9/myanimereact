@@ -125,7 +125,7 @@ function Search(props) {
 
     }, [props.location.search])
 
-    const isMobile = useMediaQuery('(max-width:410px)')
+    const isMobile = useMediaQuery('(max-width:900px)')
     //bug: opening drawer triggers useMediaQuery
     // console.log(isMobile)
     console.log(props)
