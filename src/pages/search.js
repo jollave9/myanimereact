@@ -128,7 +128,7 @@ function Search(props) {
     const isMobile = useMediaQuery('(max-width:900px)')
     //bug: opening drawer triggers useMediaQuery
     // console.log(isMobile)
-    console.log(props)
+    // console.log(props)
 
     const classes = useStyles()
 
@@ -146,7 +146,7 @@ function Search(props) {
                     <ul style={styles_Mobile.ul}>
                         {state.map((x, i) => {
                             return (
-                                <a style={styles_Mobile.a} key={'a:' + i} href={'/anime/' + x.name} >
+                                <a style={styles_Mobile.a} key={'a:' + i} href={'/anime/' + x.name.replace('?', '')} >
                                     <li style={styles_Mobile.li} key={'li:' + i}>
                                         <img style={styles_Mobile.img} key={'img:' + i} src={x.img} alt={x.name} />
                                         <p style={styles_Mobile.p} key={'p:' + i}>{x.name}</p>
@@ -178,7 +178,7 @@ function Search(props) {
                     <ul style={styles_Desktop.ul}>
                         {state.map((x, i) => {
                             return (
-                                <a style={styles_Desktop.a} key={'a:' + i} href={'/anime/' + x.name} >
+                                <a style={styles_Desktop.a} key={'a:' + i} href={'/anime/' + x.name.replace('?', '')} >
                                     <li style={styles_Desktop.li} key={'li:' + i}>
                                         <img style={styles_Desktop.img} key={'img:' + i} src={x.img} alt={x.name} />
                                         <p style={styles_Desktop.p} key={'p:' + i}>{x.name}</p>

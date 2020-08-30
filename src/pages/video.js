@@ -16,6 +16,7 @@ import searchSuggestion from '../redux/actions/searchSuggestionActions'
 import VideoPlayer from 'react-video-js-player';
 
 
+
 function Video(props) {
 
     const useStyles = makeStyles({
@@ -61,12 +62,21 @@ function Video(props) {
         isLoading: true,
         data: {}
     })
+    const [iframe_src, setIframe_src] = useState({
+        isLoading: true,
+        src: ''
+    })
 
-    const filteredNameEpisode = props.match.params.name_episode.replace(/[^\w\s]/g, '').replace(/\s/g, '-')
-    // console.log(filteredNameEpisode)
+    // const filteredNameEpisode = props.match.params.name_episode.replace(/[^\w\s]/g, '').replace(/\s/g, '-')
+    const split = props.match.params.name_episode.split(/[^\w\d]/)
+    const removedEmptyString = split.filter((x) => {
+        return x !== ""
+    })
+    const filteredNameEpisode = removedEmptyString.join('-')
     const filteredName = filteredNameEpisode.slice(0, filteredNameEpisode.lastIndexOf('Episode') - 1)
-    // console.log(filteredName)
 
+    // console.log(filteredNameEpisode)
+    // console.log(filteredName)
 
     useEffect(() => {
         const url = 'https://myanimeapi.herokuapp.com/api/video-src/' + filteredNameEpisode
@@ -82,6 +92,13 @@ function Video(props) {
         axios.get('https://myanimeapi.herokuapp.com/api/anime/' + filteredName)
             .then((res) => setState({ isLoading: false, data: res.data }))
             .catch(e => console.log(e))
+
+        axios.get('https://myanimeapi.herokuapp.com/api/iframe/' + filteredNameEpisode)
+            .then((res) => res.data)
+            .then((data) => setIframe_src({
+                isLoading: false,
+                src: 'https://' + data
+            }))
 
     }, [filteredNameEpisode, filteredName])
 
@@ -172,6 +189,8 @@ function Video(props) {
         }
     }
     console.log(vid_src.src)
+    console.log(iframe_src.src)
+
 
     return (
         <>
@@ -180,18 +199,29 @@ function Video(props) {
                     <MyAppBarMobile store={props} />
                     <MyDrawerMobile store={props} />
                     <SearchSuggestionMobile store={props} />
-                    {vid_src.isLoading && <h1 style={{ color: 'white' }}>LOADING...</h1>}
+                    {(vid_src.isLoading || iframe_src.isLoading) && <h1 style={{ color: 'white' }}>LOADING...</h1>}
 
                     {
                         vid_src.src &&
-                        <VideoPlayer
-                            controls={true}
-                            src={vid_src.src}
-                            poster={anime.data.img}
-                            fluid={false}
-                            width={document.documentElement.clientWidth}
-                            height={document.documentElement.clientWidth}
-                        />
+                            vid_src.src.search('https://storage.googleapis.com') !== -1 ?
+                            (
+                                <VideoPlayer
+                                    controls={true}
+                                    src={vid_src.src}
+                                    poster={anime.data.img}
+                                    fluid={false}
+                                    width={document.documentElement.clientWidth}
+                                    height={document.documentElement.clientWidth}
+                                />
+                            )
+                            :
+                            (
+                                iframe_src.src &&
+                                <>
+                                    <iframe title='iframe' src={iframe_src.src} width={document.documentElement.clientWidth} height={document.documentElement.clientWidth * 0.7} allowFullScreen={true} frameBorder="0" marginWidth="0" marginHeight="0" scrolling="no"></iframe>
+                                    <p style={{ margin: '0' }}>if the video won't play you can choose another server</p>
+                                </>
+                            )
                     }
                     <a style={styles_Mobile.download} href={vid_src.src}>Download</a>
 
@@ -202,7 +232,7 @@ function Video(props) {
                             anime.data.episodes && anime.data.episodes.map((x, i) => {
                                 // console.log(x)
                                 return (
-                                    <a href={`/video/${x}`} style={styles_Mobile.a}>
+                                    <a key={`a:${i}`} href={`/video/${x}`} style={styles_Mobile.a}>
                                         {anime.data.episodes.length - i}
                                     </a>
                                 )
@@ -230,21 +260,31 @@ function Video(props) {
                     </form>
                     <SearchSuggestionDesktop store={props} />
                     {
-                        vid_src.isLoading && <h1 style={{ color: 'white', marginLeft: props.openDrawer ? '0' : '200px' }}>LOADING VIDEO ...</h1>
+                        (vid_src.isLoading || iframe_src.isLoading) && <h1 style={{ color: 'white', marginLeft: props.openDrawer ? '0' : '200px' }}>LOADING VIDEO ...</h1>
                     }
                     <div style={{ display: 'flex', margin: '15px 0' }}>
+
                         {
                             vid_src.src &&
-                            <div style={styles_Desktop.div}>
-                                <VideoPlayer
-                                    controls={true}
-                                    src={vid_src.src}
-                                    poster={anime.img}
-                                    width="900"
-                                    height="450"
-                                    crossorigin
-                                />
-                            </div>
+                                vid_src.src.search('https://storage.googleapis.com') !== -1 ?
+                                (
+                                    <div style={styles_Desktop.div}>
+                                        <VideoPlayer
+                                            controls={true}
+                                            src={vid_src.src}
+                                            poster={anime.img}
+                                            width="900"
+                                            height="450"
+                                        />
+                                    </div>)
+                                :
+                                (
+                                    iframe_src.src &&
+                                    <div style={styles_Desktop.div}>
+                                        <iframe title='iframe' src={iframe_src.src} width="900" height="500" allowFullScreen={true} frameBorder="0" marginWidth="0" marginHeight="0" scrolling="no"></iframe>
+                                        <p style={{ margin: '0' }}>if the video won't play you can choose another server</p>
+                                    </div>
+                                )
                         }
                         {
                             anime.isLoading && <h1 style={{ color: 'white', marginLeft: props.openDrawer ? '0' : '200px' }}>LOADING EPISODES ...</h1>
@@ -254,7 +294,7 @@ function Video(props) {
                                 anime.data.episodes && anime.data.episodes.map((x, i) => {
                                     // console.log(x)
                                     return (
-                                        <a href={`/video/${x}`} style={styles_Desktop.a}>
+                                        <a key={`a:${i}`} href={`/video/${x}`} style={styles_Desktop.a}>
                                             <div style={styles_Desktop.episodeDiv}>
                                                 <span style={styles_Desktop.span}>{anime.data.episodes.length - i}</span>
                                             </div>

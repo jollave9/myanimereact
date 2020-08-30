@@ -35,7 +35,7 @@ export default function SearchSuggestionMobile(props) {
             <ul style={styles.ul}>
                 {props.store.searchSuggestion.data && props.store.searchSuggestion.data.map((x, i) => {
                     return (
-                        <a style={styles.a} key={'a:' + i} href={'/anime/' + x.name} >
+                        <a style={styles.a} key={'a:' + i} href={'/anime/' + x.name.replace('?', '')} >
                             <li style={styles.li} key={'li:' + i}>
                                 <img style={styles.img} key={'img:' + i} src={x.img} alt={x.name} />
                                 <p style={styles.p} key={'p:' + i}>{x.name}</p>

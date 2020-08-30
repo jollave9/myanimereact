@@ -54,8 +54,16 @@ function Anime(props) {
         isLoading: true,
         data: {}
     })
-    const filteredName = props.match.params.name.replace(/[^\w\s-]/g, '').replace(/\s/g, '-')
-    console.log(filteredName)
+    const split = props.match.params.name.split(/[^\w\d]/)
+    const removedEmptyString = split.filter((x) => {
+        return x !== ""
+    })
+    const filteredName = removedEmptyString.join('-')
+
+    // console.log(filteredName)
+    // console.log(props.match.params)
+    // const filteredName = props.match.params.name.replace(/[^\w\s-]/g, '').replace(/\s/g, '-')
+    // console.log(filteredName)
     useEffect(() => {
         const url = 'https://myanimeapi.herokuapp.com/api/anime/' + filteredName
 
@@ -67,7 +75,6 @@ function Anime(props) {
     const isMobile = useMediaQuery('(max-width:900px)')
     //bug: opening drawer triggers useMediaQuery
     // console.log(isMobile)
-    console.log(props)
 
     const classes = useStyles()
 
@@ -183,7 +190,7 @@ function Anime(props) {
                     <div style={styles_Mobile.episodes}>
                         {state.data.episodes && state.data.episodes.map((x, i) => {
                             return (
-                                <a key={i} style={styles_Mobile.a} href={`/video/${x}`}>{state.data.episodes.length - i}</a>
+                                <a key={i} style={styles_Mobile.a} href={`/video/${x.replace('?', '')}`}>{state.data.episodes.length - i}</a>
                             )
                         })}
                     </div>
@@ -217,7 +224,7 @@ function Anime(props) {
                     <div style={styles_Desktop.episodes}>
                         {state.data.episodes && state.data.episodes.map((x, i) => {
                             return (
-                                <a key={i} style={styles_Desktop.a} href={`/video/${x}`}>
+                                <a key={i} style={styles_Desktop.a} href={`/video/${x.replace('?', '')}`}>
                                     <div style={styles_Desktop.episodeDiv}>
                                         <span style={styles_Desktop.span}>{state.data.episodes.length - i}</span>
                                     </div>
