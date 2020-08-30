@@ -117,7 +117,7 @@ function Search(props) {
     const [state, setState] = useState([])
 
     useEffect(() => {
-        const url = 'http://192.168.1.111:5000/api/search'
+        const url = 'https://myanimeapi.herokuapp.com/api/search'
 
         axios.get(url + props.location.search)
             .then((res) => res.data)
