@@ -42,7 +42,7 @@ const useStyles = makeStyles({
 export default function MyDrawerMobile(props) {
 
     const classes = useStyles()
-    let isMobile = useMediaQuery('(max-width:393px)')
+    let isMobile = useMediaQuery('(max-width:900px)')
     // console.log(isMobile)
     return (
         // There's a warning in strict mode that material-ui haven't fixed yet (https://stackoverflow.com/questions/61115871/finddomnode-error-on-react-material-ui-select-menu)

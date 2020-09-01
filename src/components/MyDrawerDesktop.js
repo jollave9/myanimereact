@@ -38,7 +38,7 @@ const useStyles = makeStyles({
 export default function MyDrawerDesktop(props) {
 
     const classes = useStyles()
-    let isMobile = useMediaQuery('(max-width:393px)')
+    let isMobile = useMediaQuery('(max-width:900px)')
 
     // console.log(isMobile)
 
