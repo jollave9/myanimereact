@@ -305,7 +305,7 @@ function Video(props) {
                             }
                         </div>
                     </div>
-                    <h3>{filteredNameEpisode}</h3>
+                    {/* <h3>{filteredNameEpisode}</h3> */}
                     <a style={styles_Desktop.download} href={vid_src.src}>Download</a>
                 </>
 
