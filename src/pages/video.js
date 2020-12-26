@@ -223,6 +223,7 @@ function Video(props) {
                                 </>
                             )
                     }
+                    <h3>{filteredNameEpisode}</h3>
                     <a style={styles_Mobile.download} href={vid_src.src}>Download</a>
 
                     {anime.isLoading && <h1 style={{ color: 'white' }}>LOADING...</h1>}
@@ -304,6 +305,7 @@ function Video(props) {
                             }
                         </div>
                     </div>
+                    <h3>{filteredNameEpisode}</h3>
                     <a style={styles_Desktop.download} href={vid_src.src}>Download</a>
                 </>
 
